@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Domain.Abstract;
 using Domain.Entities;
+using WebUI.Models;
 
 namespace WebUI.Controllers
 {
@@ -19,10 +20,20 @@ namespace WebUI.Controllers
         }
        public ViewResult List(int page = 1)
         {
-            return View(repository.Games
-                .OrderBy(game=>game.GameId)
-                .Skip((page -1)*pageSize)
-                .Take(pageSize));
+            GamesListViewModel model = new GamesListViewModel
+            {
+                Games = repository.Games
+                .OrderBy(game => game.GameId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize,
+                    TotalItems = repository.Games.Count()
+                }
+            };
+            return View(model);
         }
     }
 }
