@@ -28,7 +28,7 @@ namespace UnitTests
             });
             GameController controller = new GameController(mock.Object);
             controller.pageSize = 3;
-            GamesListViewModel result =(GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result =(GamesListViewModel)controller.List(null,2).Model;
 
             List<Game> games = result.Games.ToList();
             Assert.IsTrue(games.Count == 2);
@@ -49,7 +49,7 @@ namespace UnitTests
             });
             GameController controller = new GameController(mock.Object);
             controller.pageSize = 3;
-            GamesListViewModel result=(GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result=(GamesListViewModel)controller.List(null,2).Model;
             PagingInfo pageInfo = result.PagingInfo;
             Assert.AreEqual(pageInfo.CurrentPage, 2);
             Assert.AreEqual(pageInfo.ItemsPerPage, 3);
