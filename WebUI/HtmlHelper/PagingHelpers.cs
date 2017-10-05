@@ -11,7 +11,7 @@ namespace WebUI.HtmlHelpers
             PagingInfo pagingInro,Func<int,string> pageUrl)
         {
             StringBuilder result = new StringBuilder();
-            for (int i = 0; i <= pagingInro.TotalPages; i++)
+            for (int i = 1; i <= pagingInro.TotalPages; i++)
             {
                 TagBuilder tag = new TagBuilder("a");
                 tag.MergeAttribute("href", pageUrl(i));
