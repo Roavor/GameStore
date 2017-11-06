@@ -35,8 +35,77 @@ namespace UnitTests
             Assert.AreEqual(result[0].Name, "Game1");
             Assert.AreEqual(result[1].Name, "Game2");
             Assert.AreNotEqual(result[2].Name, "Game4","Are equal");
-
-
         }
+        [TestMethod]
+        public void Can_Edit_Game()
+        {
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+            new Game { GameId = 1, Name = "Game1"},
+            new Game { GameId = 2, Name = "Game2"},
+            new Game { GameId = 3, Name = "Game3"},
+            new Game { GameId = 4, Name = "Game4"},
+            new Game { GameId = 5, Name = "Game5"}
+            });
+            AdminController controller = new AdminController(mock.Object);
+            Game game1 = controller.Edit(1).ViewData.Model as Game;
+            Game game2 = controller.Edit(2).ViewData.Model as Game;
+            Game game3 = controller.Edit(3).ViewData.Model as Game;
+            Game game4 = controller.Edit(4).ViewData.Model as Game;
+            Assert.AreEqual(1, game1.GameId);
+            Assert.AreEqual(2, game2.GameId);
+        }
+        [TestMethod]
+        public void Cannot_Edit_Nonexsistent_Game()
+        {
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+            new Game { GameId = 1, Name = "Game1"},
+            new Game { GameId = 2, Name = "Game2"},
+            new Game { GameId = 3, Name = "Game3"},
+            new Game { GameId = 4, Name = "Game4"},
+            new Game { GameId = 5, Name = "Game5"}
+            });
+            AdminController controller = new AdminController(mock.Object);
+            Game game4 = controller.Edit(6).ViewData.Model as Game;
+        }
+        [TestMethod]
+        public void Can_Save_Valid_Changes()
+        {
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            AdminController controller = new AdminController(mock.Object);
+            Game game = new Game { Name = "Test" };
+            ActionResult result = controller.Edit(game);
+            mock.Verify(m => m.SaveGame(game));
+            Assert.IsNotInstanceOfType(result,typeof(ViewResult));
+        }
+        [TestMethod]
+        public void Cannot_Save_Invalid_Changes()
+        {
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            AdminController controller = new AdminController(mock.Object);
+            Game game = new Game { Name = "Test" };
+            controller.ModelState.AddModelError("error","error");
+            ActionResult result = controller.Edit(game);
+            mock.Verify(m => m.SaveGame(It.IsAny<Game>()), Times.Never());
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+        [TestMethod]
+        public void Can_Delete_Valid_Games()
+        {
+            Game game = new Game { GameId = 2, Name = "Game2" };
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { GameId=1,Name="Game1"},
+                new Game { GameId=2,Name="Game2"},
+                new Game { GameId=3,Name="Game3"},
+                new Game { GameId=4,Name="Game4"}
+            });
+            AdminController controller = new AdminController(mock.Object);
+            controller.Delete(game.GameId);
+            mock.Verify(m => m.DeleteGame(game.GameId));
+        }
+
     }
 }

@@ -17,7 +17,7 @@ namespace WebUI.Controllers
         public GameController(IGameRepository repo)
         {
             repository = repo;
-        }
+        }   
        public ViewResult List(string category,int page = 1)
         {
             GamesListViewModel model = new GamesListViewModel

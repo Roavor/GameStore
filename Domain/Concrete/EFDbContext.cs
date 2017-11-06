@@ -8,7 +8,7 @@ using System.Data.Entity;
 
 namespace Domain.Concrete
 {
-    class EFDbContext : DbContext
+    public class EFDbContext : DbContext
     {
         public DbSet<Game> Games {get; set;}
     }
