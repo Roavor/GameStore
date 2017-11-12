@@ -20,10 +20,7 @@ namespace WebUI.Controllers
             orderProcessor = processor;
             repository = repo;
         }
-        public ViewResult Checkout()
-        {
-            return View(new ShippingDetails());
-        }
+        
         public ViewResult Index(Cart cart,string returnUrl)
         {
             return View(new CartIndexViewModel
@@ -57,10 +54,10 @@ namespace WebUI.Controllers
         {
             return PartialView(cart);
         }
-        public ViewResult Checkout(Cart cart)
-        {
-            return View(new ShippingDetails());
-        }
+        //public ViewResult Checkout(Cart cart=null)
+        //{
+          //  return View(new ShippingDetails());
+        //}
         public ViewResult Checkout(Cart cart, ShippingDetails shippingDetails)
         {
             if (cart.Lines.Count() == 0)

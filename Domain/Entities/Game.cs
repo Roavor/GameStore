@@ -26,5 +26,7 @@ namespace Domain.Entities
         [Required]
         [Range (0.01,double.MaxValue,ErrorMessage ="Please enter a positive number!")]
         public decimal Price { get; set; }
+        public byte[] ImageData { get; set; }
+        public string ImageMineType { get; set; }
     }
 }

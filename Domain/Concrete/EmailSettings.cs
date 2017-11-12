@@ -20,15 +20,16 @@ namespace Domain.Concrete
         public string ServerName = "smtp.example.com";
         public int ServerPort = 587;
         public bool WriteAsFile = true;
-        public string FileLocation = @"c:\game_store_emails";
+        public string FileLocation = @"C:\game_store_emails";
     }
     public class EmailOrderProcessor : IOrderProcessor
     {
-        private EmailSettings emailSettings;
+        private EmailSettings emailSettings=new EmailSettings { };
         public void ProcessOrder(Cart cart, ShippingDetails shippingInfo)
         {
             using (var smtpClient=new SmtpClient())
             {
+
                 smtpClient.EnableSsl = emailSettings.UseSsl;
                 smtpClient.Host = emailSettings.ServerName;
                 smtpClient.Port = emailSettings.ServerPort;

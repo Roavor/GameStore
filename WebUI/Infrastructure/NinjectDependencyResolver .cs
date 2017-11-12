@@ -7,6 +7,10 @@ using Ninject;
 using Domain.Abstract;
 using Domain.Entities;
 using Domain.Concrete;
+using WebUI.Infrastructure.Concrete;
+using WebUI.Infrastructure.Binders;
+using System.Web.Security;
+using WebUI.Abstract;
 
 
 
@@ -39,6 +43,8 @@ namespace WebUI.Infrastructure
             };
             kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>()
                 .WithConstructorArgument("settings", emailSettings);
+            kernel.Bind<IAuthProvider>().To<FormAuthProvider>();
         }
+
     }
 }

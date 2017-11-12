@@ -7,34 +7,62 @@
 }
 <div class="panel">
     <div class="panel-heading">
-        <h3>Edit game @Model.Name</h3>
+        <h3>Edit game: @Model.Name</h3>
     </div>
 
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, 
+        new { enctype = "multipart/form-data" }))
     {
         <div class="panel-body">
             @Html.HiddenFor(m => m.GameId)
             @foreach (var property in ViewData.ModelMetadata.Properties)
             {
-                if (property.PropertyName != "GameId")
+                switch (property.PropertyName)
                 {
+                    case "GameId":
+                    case "ImageData":
+                    case "ImageMineType":
+                        break;
+                    default:
+                                    <div class="form-group">
+                                        <label>@(property.DisplayName ?? property.PropertyName)</label>
+                                        @if (property.PropertyName == "Descriptoin")
+                                        {
+                                            @Html.TextArea(property.PropertyName, null, new { @class = "form-controll", rows = 5 })
+
+
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBox(property.PropertyName, null, new
+                                       {
+                                           @class = "form-controll"
+                                       })
+                                        }
+                                        @Html.ValidationMessage(property.PropertyName)
+                                    </div>
+                        break;
+                }
+            }
+
                     <div class="form-group">
-                        <label> @(property.DisplayName ?? property.PropertyName)</label>
-                        @if (property.PropertyName == "Description")
+                        <div style="position:relative">
+                            <label>Picture</label>
+                            <a class="btn" href="javascript:;">
+                                <input type="file" name="upload" />
+                            </a>
+                        </div>
+                        @if (Model.ImageData == null)
                         {
-                            @Html.TextArea(property.PropertyName, null,
-                    new { @class = "form-controll", rows = 5 })
+                            <div class="form-control-static">No picture!</div>
                         }
                         else
                         {
-                            @Html.TextBox(property.PropertyName, null,
-                     new { @class = "form-controll" })
+                                <img class="img" width="150" height="150" scr="@Url.Action("GetImage", "Game", new { Model.GameId })"/>
                         }
-                        @Html.ValidationMessage(property.PropertyName)
+                        
                     </div>
-                }
-            }
         </div>
         <div class="panel-footer">
             <input type="submit" value="Save" class="btn btn-primary" />
